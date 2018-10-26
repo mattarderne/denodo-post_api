@@ -25,7 +25,7 @@ Follow the below steps to explore this feature:
 	1. Import the `flask_post_api.vql` into Denodo using the Denodo IMPORT functionality.
 	2. Notice that a data source, base view and flattened view is imported
 
-1. We can now run queries against our flatted view in Denodo, such as `select * from f_post_api_test where lang  = \'TEST\'` which will execute a POST against the API, and return the results from the API.
+1. We can now run queries against our flatted view in Denodo, such as `select * from f_post_api_test where lang  = 'TEST'` which will execute a POST against the API, and return the results from the API.
 
 ## Notes
 
