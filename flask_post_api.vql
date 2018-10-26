@@ -1,0 +1,101 @@
+# Generated with Denodo Platform 7.0 update 20181011.
+
+ENTER SINGLE USER MODE;
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+CREATE OR REPLACE FOLDER '/post_api_test' ;
+
+CREATE OR REPLACE DATASOURCE JSON post_api_test
+    FOLDER = '/post_api_test'
+    ROUTE HTTP 'http.CommonsHttpClientConnection,120000' POST 'http://127.0.0.1:5000/json-example'
+    POSTBODY '\{
+    "language" : "@lang",
+    "framework" : "Flask",
+    "website" : "Scotch",
+    "version_info" : \{
+        "python" : 3.4,
+        "flask" : 0.12
+    \},
+    "examples" : ["query", "form", "json"],
+    "boolean_test" : true
+\}'
+    MIME 'application/json'
+    HEADERS (
+        'Content-Type'='application/json'
+    )
+    AUTHENTICATION OFF
+    PROXY OFF;
+
+CREATE OR REPLACE FOLDER '/1 - Data Sources' ;
+
+CREATE OR REPLACE WRAPPER JSON post_api_test_7660
+    FOLDER = '/1 - data sources'
+    DATASOURCENAME=post_api_test
+    TUPLEROOT '/JSONFile'
+    OUTPUTSCHEMA (jsonfile = 'JSONFile' : REGISTER OF (
+        lang = 'LANG' : 'java.lang.String' (OBL) (DEFAULTVALUE='test') EXTERN,
+        boolean_test = 'boolean_test' : 'java.lang.String',
+        examples = 'examples' : ARRAY OF (
+            examples = 'examples' : REGISTER OF (
+                field_0 = 'field_0' : 'java.lang.String'
+            )
+        ),
+        framework = 'framework' : 'java.lang.String',
+        language = 'language' : 'java.lang.String',
+        version_info = 'version_info' : REGISTER OF (
+            flask = 'flask' : 'java.lang.Double',
+            python = 'python' : 'java.lang.Double'
+        ),
+        website = 'website' : 'java.lang.String'
+    )
+    );
+
+CREATE OR REPLACE TYPE post_api_test_examples_examples AS REGISTER OF (field_0:text);
+
+CREATE OR REPLACE TYPE post_api_test_examples AS ARRAY OF post_api_test_examples_examples;
+
+CREATE OR REPLACE TYPE post_api_test_version_info AS REGISTER OF (flask:double, python:double);
+
+CREATE OR REPLACE TABLE post_api_test I18N gb (
+        lang:text (extern), 
+        boolean_test:text, 
+        examples:post_api_test_examples, 
+        framework:text, 
+        language:text, 
+        version_info:post_api_test_version_info, 
+        website:text
+    )
+    FOLDER = '/post_api_test'
+    CACHE OFF
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD post_api_test(
+        I18N gb
+        CONSTRAINTS (
+             ADD lang (=) OBL ONE
+             ADD boolean_test NOS ZERO ()
+             ADD examples NOS ZERO ()
+             ADD examples NOS ZERO ()
+             ADD examples.field_0 NOS ZERO ()
+             ADD framework NOS ZERO ()
+             ADD language NOS ZERO ()
+             ADD version_info NOS ZERO ()
+             ADD version_info.flask NOS ZERO ()
+             ADD version_info.python NOS ZERO ()
+             ADD website NOS ZERO ()
+        )
+        OUTPUTLIST (boolean_test, examples, framework, language, version_info, website
+        )
+        WRAPPER (json post_api_test_7660)
+    );
+
+CREATE OR REPLACE VIEW f_post_api_test FOLDER = '/post_api_test' AS SELECT lang AS lang, boolean_test AS boolean_test, framework AS framework, language AS language, website AS website, field_0 AS field_0, (version_info).flask AS flask, (version_info).python AS python FROM FLATTEN post_api_test AS v ( v.examples);
+
+ALTER VIEW f_post_api_test
+ LAYOUT (post_api_test = [20, 20, 290, 226]);
+
+
+
+
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+EXIT SINGLE USER MODE;
+
