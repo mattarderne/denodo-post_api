@@ -6,6 +6,11 @@ This repo is a nice example of the relatively undocumented ability to POST data 
 
 > Denodo standard and well documented features include turning JSON data from an API into flattened views, as well as doing INSERT commands to JDBC databases.
 
+## Requirements
+
+* [Denodo Express](https://community.denodo.com/express/download)
+* Python installed (covered in step 1)
+
 ## Instructions
 
 Follow the below steps to explore this feature:
@@ -14,6 +19,7 @@ Follow the below steps to explore this feature:
 	* Start the app using `python app.py`
 
 1. Now notice the `app2.py` file in this repom which has been modified to return JSON format from the POST request, see [JSONIFY](https://stackoverflow.com/questions/13081532/return-json-response-from-flask-view) details. The JSONIFY is necessary to ensure that the API returns whatever is posted to it in JSON format, which Denodo is able to turn into a virtual view.
+	* Stop the other `app.py` and start the new one using `python app2.py`
 
 1. Now to virtualize in Denodo. The VQL files contained in this repo contain all the details, and the VQL folder can be virtualized into Denodo.
 	1. Import the `flask_post_api.vql` into Denodo using the Denodo IMPORT functionality.
