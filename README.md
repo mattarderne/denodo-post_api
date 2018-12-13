@@ -25,7 +25,10 @@ Follow the below steps to explore this feature:
 	3. Notice that a data source, base view and flattened view is imported
 	4. Open the VQL Shell
 
-1. We can now run queries against our flatted view in Denodo, such as `select * from f_post_api_test where lang  = 'TEST'` which will execute a POST against the API, and return the results from the API.
+1. We can now run queries against our flatted view in Denodo, such as the following, which will execute a POST against the API, and return the results, which can be joined to other applicable views:
+
+`select * from f_post_api_test where lang  = 'TEST'` 
+
 
 ## Notes
 
